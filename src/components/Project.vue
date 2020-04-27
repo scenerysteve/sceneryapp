@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col>
         <v-tabs grow primary>
-          <v-tab>{{ project.getTitle() }}</v-tab>
+          <v-tab>{{ project.title }}</v-tab>
         </v-tabs>
       </v-col>
     </v-row>
@@ -82,15 +82,15 @@ import Scene from "./Scene.vue";
 export default Vue.extend({
   components: { Scene },
   computed: {
-    ...mapGetters(["actBreaks", "statusNames", "scenes"]),
+    ...mapGetters(["actBreaks", "scenes"]),
     ...mapState(["project"]),
     filteredScenes() {
       return this.scenes.filter(this.filter);
     }
   },
   created() {
-    for (let i = 0; i < this.statusNames.length; i++) {
-      Vue.set(this.filters.statuses, this.statusNames[i], true);
+    for (let i = 0; i < this.project.statuses.length; i++) {
+      Vue.set(this.filters.statuses, this.project.statuses[i].name, true);
     }
   },
   data() {
@@ -105,9 +105,9 @@ export default Vue.extend({
   methods: {
     filter(scene) {
       return (
-        ((this.filters.plot && scene.getIsPlot()) ||
-          (this.filters.filler && !scene.getIsPlot())) &&
-        this.filters.statuses[scene.getStatus().getName()]
+        ((this.filters.plot && scene.isPlot) ||
+          (this.filters.filler && !scene.isPlot)) &&
+        this.filters.statuses[scene.status.name]
       );
     },
     resetFilters() {

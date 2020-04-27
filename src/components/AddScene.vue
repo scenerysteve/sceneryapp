@@ -44,16 +44,16 @@
 <script>
 import Vue from "vue";
 import * as _ from "lodash";
-import Scene from "@/types/Scene";
+import Scene from "@/classes/Scene";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
   computed: {
-    ...mapState(["project", "statuses"]),
+    ...mapState(["project"]),
     statusNames: function() {
       const names = [];
-      for (let i = 0; i < this.statuses.length; i++) {
-        names.push(this.statuses[i].getName());
+      for (let i = 0; i < this.project.statuses.length; i++) {
+        names.push(this.project.statuses[i].name);
       }
       return names;
     }
@@ -87,8 +87,8 @@ export default Vue.extend({
     },
     findStatus: function(statusName) {
       return _.find(
-        this.statuses,
-        status => status.getName().localeCompare(statusName) === 0
+        this.project.statuses,
+        status => status.name.localeCompare(statusName) === 0
       );
     }
   },

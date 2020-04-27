@@ -1,10 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import * as _ from "lodash";
-import ActBreak from "@/types/ActBreak";
-import Project from "@/types/Project";
-import Scene from "@/types/Scene";
-import Status from "@/types/Status";
+import ActBreak from "@/classes/ActBreak";
+import Project from "@/classes/Project";
+import Scene from "@/classes/Scene";
+import Status from "@/classes/Status";
 
 Vue.use(Vuex);
 
@@ -14,8 +14,11 @@ export default new Vuex.Store({
     actBreaks: state => {
       return state.project.cards.filter(card => typeof card === ActBreak);
     },
+    displayStatuses: state => {
+      return state.project.statuses.filter(status => status.display);
+    },
     scenes: state => {
-      return state.project.cards.filter(card => card instanceof Scene);
+      return state.project.cards.filter(card => typeof card === Scene);
     }
   },
   modules: {},
@@ -23,7 +26,7 @@ export default new Vuex.Store({
     ADD_ACT_BREAK: (state, actBreak) => state.project.cards.push(actBreak),
     ADD_SCENE: (state, scene) => state.project.cards.push(scene),
     EDIT_ACT_BREAK: () => {
-    // EDIT_ACT_BREAK: (state, data) => {
+      // EDIT_ACT_BREAK: (state, data) => {
       /*
 
       state.project.setCards(
@@ -35,10 +38,10 @@ export default new Vuex.Store({
       (state.project.cards[data.index] = data.newScene),
     // REMOVE_ACT_BREAK: () => (),
     REMOVE_SCENE: (state, scene) =>
-      state.project.cards = _.pull(state.project.cards, scene),
-      // state.project.setCards(_.pull(state.project.getCards(), scene)),
+      (state.project.cards = _.pull(state.project.cards, scene)),
+    // state.project.setCards(_.pull(state.project.getCards(), scene)),
     SET_STATUSES: () => {
-    // SET_STATUSES: (state, statuses) => {
+      // SET_STATUSES: (state, statuses) => {
       /*
       // Update statuses to keep
       for (let i = 0; i < statuses.length; i++) {
@@ -65,7 +68,7 @@ export default new Vuex.Store({
       }
        */
     },
-    SET_TITLE: (state, title) => state.project.title = title
+    SET_TITLE: (state, title) => (state.project.title = title)
   },
   state: {
     project: new Project(

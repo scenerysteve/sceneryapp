@@ -104,7 +104,7 @@
 
 <script>
 import Vue from "vue";
-import { mapState, mapMutations } from "vuex";
+import { mapState } from "vuex";
 
 export default Vue.extend({
   computed: {
@@ -113,38 +113,11 @@ export default Vue.extend({
 
   data() {
     return {
-      drawer: null,
-      navItems: [
-        {
-          text: "View Project",
-          to: "project"
-        },
-        {
-          text: "New Project",
-          to: "/"
-        },
-        {
-            // TODO figure out how to make this work by passing the event handler method
-          click: "openProject",
-          text: "Open Project"
-        },
-        {
-          click: "saveProject",
-          text: "Save Project"
-        },
-        {
-          text: "Project Settings",
-          to: "settings"
-        }
-      ]
+      drawer: null // Null makes the drawer show on page load on desktop
     };
   },
 
   methods: {
-    ...mapMutations(["ADD_ACT_BREAK", "ADD_CARD", "EDIT_CARD", "REMOVE_CARD"]),
-    addActBreak: () => console.log("Add act break"),
-    addCard: () => console.log("Add card"),
-    editCard: () => console.log("Edit card"),
     getFilename() {
       // TODO make this strip out any unusable characters
       return this.project.title + ".json";
@@ -152,7 +125,6 @@ export default Vue.extend({
     hasFocus(element) {
       return element === document.activeElement;
     },
-    newProject: () => console.log("New Project clicked"),
     openFile(event) {
       const target = event.target;
       const files = target.files;
@@ -175,12 +147,11 @@ export default Vue.extend({
       }
     },
     openProject() {
-      const input = document.getElementById("open-project");
-      input.addEventListener("change", this.openFile);
-      input.click();
+      document
+        .getElementById("open-project")
+        .addEventListener("change", this.openFile)
+        .click();
     },
-    projectSettings: () => console.log("Project settings"),
-    removeCard: () => console.log("Remove card"),
     saveProject() {
       const anchor = document.createElement("a");
       const file = new Blob([JSON.stringify(this.project)], { type: "json" });

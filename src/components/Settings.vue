@@ -79,15 +79,16 @@
 <script>
 import Vue from "vue";
 import * as _ from "lodash";
-import { mapMutations, mapState } from "vuex";
+import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
   computed: {
-    ...mapState(["project", "statuses"])
+    ...mapGetters(["displayStatuses"]),
+    ...mapState(["project"])
   },
   created() {
     this.settings.statuses = this.getStatuses();
-    this.settings.title = this.project.getTitle();
+    this.settings.title = this.project.title;
   },
   data() {
     return {
@@ -104,20 +105,20 @@ export default Vue.extend({
     },
     getStatuses() {
       const statuses = [];
-      for (let i = 0; i < this.statuses.length; i++) {
+      for (let i = 0; i < this.displayStatuses.length; i++) {
         statuses.push({
-          color: this.statuses[i].getColor(),
-          id: this.statuses[i].id,
-          name: this.statuses[i].getName()
+          color: this.displayStatuses[i].color,
+          id: this.displayStatuses[i].id,
+          name: this.displayStatuses[i].name
         });
       }
       return statuses;
     },
     // getStatusObjects() {
     //   const objects = [];
-    //   for (let i = 0; i < this.statuses.length; i++) {
+    //   for (let i = 0; i < this.project.statuses.length; i++) {
     //     objects.push(
-    //       new Status(this.statuses[i].getColor(), this.statuses[i].getName())
+    //       new Status(this.project.statuses[i].getColor(), this.project.statuses[i].getName())
     //     );
     //   }
     //   return objects;

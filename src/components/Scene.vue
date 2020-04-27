@@ -3,11 +3,11 @@
     <template #activator="{ on }">
       <v-card
         class="index-card"
-        :style="{ 'background-color': scene.getStatus().getColor() }"
+        :style="{ 'background-color': scene.status.color }"
         v-on="on"
       >
         <v-card-title>
-          <span>{{ scene.getTitle() }}</span>
+          <span>{{ scene.title }}</span>
           <v-spacer></v-spacer>
           <v-tooltip top>
             <template #activator="{ on }">
@@ -18,7 +18,7 @@
             <span>{{ isPlot ? "Plot Scene" : "Filler Scene" }}</span>
           </v-tooltip>
         </v-card-title>
-        <v-card-text>{{ scene.getDescription() }}</v-card-text>
+        <v-card-text>{{ scene.description }}</v-card-text>
       </v-card>
     </template>
     <v-list>
@@ -46,7 +46,7 @@ export default Vue.extend({
       return this.isPlot ? "mdi-star" : "mdi-star-outline";
     },
     isPlot: function() {
-      return this.scene.getIsPlot();
+      return this.scene.isPlot;
     }
   },
   methods: {
