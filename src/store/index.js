@@ -1,25 +1,16 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import * as _ from "lodash";
-import ActBreak from "@/classes/ActBreak";
-import Project from "@/classes/Project";
-import Scene from "@/classes/Scene";
-import Status from "@/classes/Status";
+import { defaultProject } from "../classes/Project";
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
   actions: {},
   getters: {
-    actBreaks: state => {
-      return state.project.cards.filter(card => typeof card === ActBreak);
-    },
-    displayStatuses: state => {
-      return state.project.statuses.filter(status => status.display);
-    },
-    scenes: state => {
-      return state.project.cards.filter(card => typeof card === Scene);
-    }
+    actBreaks: state => state.project.getActBreaks(),
+    displayStatuses: state => state.project.getDisplayStatuses(),
+    scenes: state => state.project.getScenes()
   },
   modules: {},
   mutations: {
@@ -71,25 +62,6 @@ export default new Vuex.Store({
     SET_TITLE: (state, title) => (state.project.title = title)
   },
   state: {
-    project: new Project(
-      [
-        new ActBreak(1),
-        new Scene(
-          "Add a scene description here",
-          true,
-          new Status("#ffffff", true, "Not Written"),
-          "Add a title here"
-        )
-      ],
-      [
-        new Status("#ffffff", false, "No Status"),
-        new Status("#ffffff", true, "Not Written"),
-        new Status("#dcffdc", true, "Completed"),
-        new Status("#dcdcff", true, "Partially Written"),
-        new Status("#ffffdc", true, "Needs Rewrites"),
-        new Status("#ffdcdc", true, "Possibly Unnecessary")
-      ],
-      "New Project"
-    )
+    project: defaultProject
   }
 });
