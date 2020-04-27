@@ -1,28 +1,38 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import Home from "../views/Home.vue";
+import AddScene from "@/components/AddScene.vue";
+import AddActBreak from "@/components/AddActBreak.vue";
+import Project from "@/components/Project.vue";
+import Settings from "@/components/Settings.vue";
 
 Vue.use(VueRouter);
 
-const routes = [
-  {
-    path: "/",
-    name: "Home",
-    component: Home
-  },
-  {
-    path: "/about",
-    name: "About",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/About.vue")
-  }
-];
-
-const router = new VueRouter({
-  routes
+export default new VueRouter({
+  routes: [
+    {
+      component: AddActBreak,
+      name: "Add Act Break",
+      path: "/addActBreak"
+    },
+    {
+      component: AddScene,
+      name: "Add Scene",
+      path: "/addScene"
+    },
+    {
+      component: Settings,
+      name: "New Project",
+      path: "/"
+    },
+    {
+      component: Project,
+      name: "Project",
+      path: "/project"
+    },
+    {
+      component: Settings,
+      name: "Project Settings",
+      path: "/settings"
+    }
+  ]
 });
-
-export default router;

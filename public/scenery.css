@@ -1,0 +1,26 @@
+#drawer a {
+  color: rgba(0, 0, 0, 0.87);
+  text-decoration: none !important;
+}
+
+.full {
+  width: 100%;
+  height: 100%;
+}
+
+.index-card {
+  height: 195px;
+  width: 325px;
+}
+
+.is-plot {
+  color: gold !important;
+}
+
+.project {
+  align-content: start;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  padding: 32px;
+}
