@@ -13,8 +13,10 @@ export class Status {
   }
 }
 
+export const noStatus = new Status("#ffffff", false, "No Status");
+
 export const defaultStatuses = [
-  new Status("#ffffff", false, "No Status"),
+  noStatus,
   new Status("#ffffff", true, "Not Written"),
   new Status("#dcffdc", true, "Completed"),
   new Status("#dcdcff", true, "Partially Written"),
