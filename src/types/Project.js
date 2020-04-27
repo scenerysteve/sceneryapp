@@ -1,8 +1,11 @@
-import { Card } from "./Card";
-import Status from "./Status";
+export default class Project {
+  cards;
+  statuses;
+  title;
 
-interface Project {
-  cards: Array<Card>;
-  statuses: Array<Status>;
-  title: string;
+  constructor(cards, statuses, title) {
+    this.cards = cards;
+    this.statuses = statuses;
+    this.title = title;
+  }
 }

@@ -1,10 +1,10 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import * as _ from "lodash";
-import "@/types/ActBreak";
-import "@/types/Project";
-import "@/types/Scene";
-import "@/types/Status";
+import ActBreak from "@/types/ActBreak";
+import Project from "@/types/Project";
+import Scene from "@/types/Scene";
+import Status from "@/types/Status";
 
 Vue.use(Vuex);
 
@@ -12,26 +12,34 @@ export default new Vuex.Store({
   actions: {},
   getters: {
     actBreaks: state => {
-      return state.project.cards.filter(card => card is ActBreak);
+      return state.project.cards.filter(card => typeof card === ActBreak);
     },
     scenes: state => {
-      return state.project.getCards().filter(card => card instanceof Scene);
+      return state.project.cards.filter(card => card instanceof Scene);
     }
   },
   modules: {},
   mutations: {
-    ADD_ACT_BREAK: (state, actBreak) => state.project.getCards().push(actBreak),
-    ADD_SCENE: (state, scene) => state.project.getCards().push(scene),
-    EDIT_ACT_BREAK: (state, data) =>
+    ADD_ACT_BREAK: (state, actBreak) => state.project.cards.push(actBreak),
+    ADD_SCENE: (state, scene) => state.project.cards.push(scene),
+    EDIT_ACT_BREAK: () => {
+    // EDIT_ACT_BREAK: (state, data) => {
+      /*
+
       state.project.setCards(
         state.project.getCards().splice(data.index, 1, data.newActBreak)
-      ),
+      )
+       */
+    },
     EDIT_SCENE: (state, data) =>
-      (state.project.getCards()[data.index] = data.newScene),
+      (state.project.cards[data.index] = data.newScene),
     // REMOVE_ACT_BREAK: () => (),
     REMOVE_SCENE: (state, scene) =>
-      state.project.setCards(_.pull(state.project.getCards(), scene)),
-    SET_STATUSES: (state, statuses) => {
+      state.project.cards = _.pull(state.project.cards, scene),
+      // state.project.setCards(_.pull(state.project.getCards(), scene)),
+    SET_STATUSES: () => {
+    // SET_STATUSES: (state, statuses) => {
+      /*
       // Update statuses to keep
       for (let i = 0; i < statuses.length; i++) {
         const index = _.findIndex(state.statuses, ["id", statuses[i].id]);
@@ -55,29 +63,30 @@ export default new Vuex.Store({
           }
         }
       }
+       */
     },
-    SET_TITLE: (state, title) => state.project.setTitle(title)
+    SET_TITLE: (state, title) => state.project.title = title
   },
   state: {
-    // TODO statuses should probably be a property of the project
     project: new Project(
       [
         new ActBreak(1),
         new Scene(
           "Add a scene description here",
           true,
-          new Status("#ffffff", "Not Written"),
+          new Status("#ffffff", true, "Not Written"),
           "Add a title here"
         )
       ],
+      [
+        new Status("#ffffff", false, "No Status"),
+        new Status("#ffffff", true, "Not Written"),
+        new Status("#dcffdc", true, "Completed"),
+        new Status("#dcdcff", true, "Partially Written"),
+        new Status("#ffffdc", true, "Needs Rewrites"),
+        new Status("#ffdcdc", true, "Possibly Unnecessary")
+      ],
       "New Project"
-    ),
-    statuses: [
-      new Status("#ffffff", "Not Written"),
-      new Status("#dcffdc", "Completed"),
-      new Status("#dcdcff", "Partially Written"),
-      new Status("#ffffdc", "Needs Rewrites"),
-      new Status("#ffdcdc", "Possibly Unnecessary")
-    ]
+    )
   }
 });

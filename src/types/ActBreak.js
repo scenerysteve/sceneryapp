@@ -1,4 +1,10 @@
-export default interface ActBreak {
-  act: number;
-  readonly id: string;
+import Card from "./Card";
+
+export default class ActBreak extends Card {
+  act;
+
+  constructor(act) {
+    super();
+    this.act = act;
+  }
 }

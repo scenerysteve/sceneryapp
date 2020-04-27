@@ -1,4 +1,9 @@
-import ActBreak from "./ActBreak";
-import Scene from "./Scene";
+import { v4 as uuidv4 } from "uuid";
 
-export type Card = ActBreak | Scene;
+export default class Card {
+  id;
+
+  constructor() {
+    this.id = uuidv4();
+  }
+}

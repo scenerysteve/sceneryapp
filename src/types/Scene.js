@@ -1,9 +1,16 @@
-import Status from "./Status";
+import Card from "./Card";
 
-export default interface Scene {
-  description: string;
-  readonly id: string;
-  isPlot: boolean;
-  status: Status;
-  title: string;
+export default class Scene extends Card {
+  description;
+  isPlot;
+  status;
+  title;
+
+  constructor(description, isPlot, status, title) {
+    super();
+    this.description = description;
+    this.isPlot = isPlot;
+    this.status = status;
+    this.title = title;
+  }
 }

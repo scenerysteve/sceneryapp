@@ -154,7 +154,7 @@ export default Vue.extend({
     },
     newProject: () => console.log("New Project clicked"),
     openFile(event) {
-      const target = event.target as HTMLInputElement;
+      const target = event.target;
       const files = target.files;
       if (files) {
         const file = files[0];
