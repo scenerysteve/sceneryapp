@@ -37,7 +37,7 @@
 
 <script>
 import Vue from "vue";
-import ActBreak from "@/classes/ActBreak";
+import { ActBreak } from "../classes/ActBreak";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
