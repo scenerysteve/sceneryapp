@@ -36,7 +36,7 @@
             <v-tooltip top>
               <template #activator="{ on }">
                 <v-btn
-                  @click.prevent="colorInputClick(status.id)"
+                  @click="colorInputClick(status.id)"
                   elevation="3"
                   icon
                   large
@@ -57,12 +57,7 @@
             <v-text-field label="Name" v-model="status.name"></v-text-field>
             <v-tooltip top>
               <template #activator="{ on }">
-                <v-btn
-                  @click.prevent="removeStatus(status)"
-                  icon
-                  large
-                  v-on="on"
-                >
+                <v-btn @click="removeStatus(status)" icon large v-on="on">
                   <v-icon>mdi-trash-can</v-icon>
                 </v-btn>
               </template>
@@ -99,7 +94,10 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapMutations(["SET_STATUSES", "SET_TITLE"]),
+    ...mapMutations(["MODIFY_SETTINGS"]),
+    addStatus() {
+      // TODO implement this
+    },
     colorInputClick(statusId) {
       document.getElementById("color-input-" + statusId).click();
     },
@@ -115,17 +113,17 @@ export default Vue.extend({
       return statuses;
     },
     removeStatus(status) {
-      // TODO ask for confirmation first
-      Vue.set(
-        this.settings,
-        "statuses",
-        _.pull(this.settings.statuses, status)
-      );
-      this.$forceUpdate();
+      if (confirm("Are you sure you want to remove this status?")) {
+        Vue.set(
+          this.settings,
+          "statuses",
+          _.pull(this.settings.statuses, status)
+        );
+        this.$forceUpdate();
+      }
     },
     submit() {
-      // this.SET_STATUSES(this.settings.statuses);
-      // this.SET_TITLE(this.settings.title);
+      this.MODIFY_SETTINGS(this.settings);
       this.$router.push("/project");
     }
   },

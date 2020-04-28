@@ -2,6 +2,8 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as _ from "lodash";
 import { defaultProject } from "../classes/Project";
+import { noStatus, Status } from "../classes/Status";
+import { Settings } from "../classes/Settings";
 
 Vue.use(Vuex);
 
@@ -31,7 +33,24 @@ export default new Vuex.Store({
       }
     },
     MODIFY_PROJECT: (state, project) => (state.project = project),
-    MODIFY_SETTINGS: (state, settings) => (state.project.settings = settings),
+    MODIFY_SETTINGS: (state, settings) => {
+      const statusObjects = [];
+      for (let i = 0; i < settings.statuses.length; i++) {
+        statusObjects.push(
+          new Status(
+            settings.statuses[i].color,
+            true,
+            settings.statuses[i].name
+          )
+        );
+        // Preserve the status ID
+        statusObjects[statusObjects.length - 1].id = settings.statuses[i].id;
+      }
+      state.project.settings = new Settings(
+        _.union([noStatus], statusObjects), // Preserve the noStatus
+        settings.title
+      );
+    },
     MOVE_CARD: (state, card, index) => {
       Vue.set(
         state.project,
