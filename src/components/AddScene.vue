@@ -54,7 +54,7 @@
           <v-tooltip top>
             <template #activator="{ on }">
               <v-btn @click="addScene(true)" v-on="on">
-                <v-icon>mdi-plus</v-icon> Submit
+                <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Submit
               </v-btn>
             </template>
             <span>Submit and add another scene</span>

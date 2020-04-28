@@ -5,7 +5,7 @@
   >
     <v-container>
       <v-row>
-        <v-col class="px-0" cols="auto">
+        <v-col class="px-0">
           <v-card-title>
             <span>{{ scene.title }}</span>
             <v-spacer></v-spacer>
@@ -21,7 +21,8 @@
           <v-card-text>{{ scene.description }}</v-card-text>
         </v-col>
         <v-divider vertical></v-divider>
-        <v-col class="px-0" cols="auto">
+        <!-- TODO figure out best way to get the spacing here -->
+        <v-col class="pl-5 pr-0" style="max-width: 50px;">
           <v-row>
             <v-tooltip top>
               <template #activator="{ on }">

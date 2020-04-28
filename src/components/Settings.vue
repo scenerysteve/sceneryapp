@@ -64,6 +64,14 @@
               <span>Remove Status</span>
             </v-tooltip>
           </div>
+          <div class="mb-4">
+            <v-btn class="mr-4" @click="addStatus">
+              <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Add Status
+            </v-btn>
+            <v-btn @click="removeAllStatuses" color="error">
+              <v-icon class="mr-1">mdi-minus-circle-outline</v-icon> Remove All
+            </v-btn>
+          </div>
           <v-btn color="primary" type="submit">Submit</v-btn>
         </v-form>
       </v-col>
@@ -75,6 +83,7 @@
 import Vue from "vue";
 import * as _ from "lodash";
 import { mapGetters, mapMutations, mapState } from "vuex";
+import { Status } from "../classes/Status";
 
 export default Vue.extend({
   computed: {
@@ -96,7 +105,7 @@ export default Vue.extend({
   methods: {
     ...mapMutations(["MODIFY_SETTINGS"]),
     addStatus() {
-      // TODO implement this
+      this.settings.statuses.push(new Status("#ffffff", true, "New Status"));
     },
     colorInputClick(statusId) {
       document.getElementById("color-input-" + statusId).click();
@@ -104,6 +113,7 @@ export default Vue.extend({
     getStatuses() {
       const statuses = [];
       for (let i = 0; i < this.displayStatuses.length; i++) {
+        // TODO use Status objects here?
         statuses.push({
           color: this.displayStatuses[i].color,
           id: this.displayStatuses[i].id,
@@ -111,6 +121,11 @@ export default Vue.extend({
         });
       }
       return statuses;
+    },
+    removeAllStatuses() {
+      if (confirm("Are you sure you want to remove all statuses?")) {
+        this.settings.statuses = [];
+      }
     },
     removeStatus(status) {
       if (confirm("Are you sure you want to remove this status?")) {
