@@ -1,9 +1,10 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
-import AddScene from "@/components/AddScene.vue";
-import AddActBreak from "@/components/AddActBreak.vue";
-import Project from "@/components/Project.vue";
-import Settings from "@/components/Settings.vue";
+import AddScene from "../components/AddScene.vue";
+import AddActBreak from "../components/AddActBreak.vue";
+import EditScene from "../components/EditScene.vue";
+import Project from "../components/Project.vue";
+import Settings from "../components/Settings.vue";
 
 Vue.use(VueRouter);
 
@@ -18,6 +19,12 @@ export default new VueRouter({
       component: AddScene,
       name: "Add Scene",
       path: "/addScene"
+    },
+    {
+      component: EditScene,
+      name: "Edit Scene",
+      path: "/editScene/:id",
+      props: true
     },
     {
       component: Settings,

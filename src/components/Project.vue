@@ -3,7 +3,7 @@
     <v-row no-gutters>
       <v-col>
         <v-tabs grow primary>
-          <v-tab>{{ project.title }}</v-tab>
+          <v-tab>{{ project.settings.title }}</v-tab>
         </v-tabs>
       </v-col>
     </v-row>
@@ -60,12 +60,8 @@
       <v-col class="full">
         <div class="full project">
           <!-- TODO figure out how to display act breaks -->
-          <div
-            class="ma-4"
-            :key="index"
-            v-for="(scene, index) in filteredScenes"
-          >
-            <Scene :scene="scene" />
+          <div class="ma-4" :key="card.id" v-for="card in filteredCards">
+            <Scene :scene="card" />
           </div>
         </div>
       </v-col>
@@ -76,21 +72,25 @@
 <script>
 import Vue from "vue";
 import * as _ from "lodash";
-import { mapGetters, mapState } from "vuex";
+import { mapState } from "vuex";
 import Scene from "./Scene.vue";
+import { Scene as SceneObj } from "../classes/Scene";
 
 export default Vue.extend({
   components: { Scene },
   computed: {
-    ...mapGetters(["actBreaks", "scenes"]),
     ...mapState(["project"]),
-    filteredScenes() {
-      return this.scenes.filter(this.filter);
+    filteredCards() {
+      return this.project.cards.filter(this.filter);
     }
   },
   created() {
-    for (let i = 0; i < this.project.statuses.length; i++) {
-      Vue.set(this.filters.statuses, this.project.statuses[i].name, true);
+    for (let i = 0; i < this.project.settings.statuses.length; i++) {
+      Vue.set(
+        this.filters.statuses,
+        this.project.settings.statuses[i].name,
+        true
+      );
     }
   },
   data() {
@@ -103,11 +103,12 @@ export default Vue.extend({
     };
   },
   methods: {
-    filter(scene) {
+    filter(card) {
       return (
-        ((this.filters.plot && scene.isPlot) ||
-          (this.filters.filler && !scene.isPlot)) &&
-        this.filters.statuses[scene.status.name]
+        card instanceof SceneObj &&
+        ((this.filters.plot && card.isPlot) ||
+          (this.filters.filler && !card.isPlot)) &&
+        this.filters.statuses[card.status.name]
       );
     },
     resetFilters() {

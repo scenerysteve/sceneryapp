@@ -50,9 +50,10 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapMutations(["ADD_ACT_BREAK"]),
+    ...mapMutations(["ADD_CARD"]),
     addActBreak() {
-      this.ADD_ACT_BREAK(new ActBreak(this.act));
+      this.ADD_CARD(new ActBreak(this.act));
+      this.$router.push("/project");
     }
   },
   name: "AddActBreak"

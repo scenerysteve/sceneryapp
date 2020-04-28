@@ -2,30 +2,34 @@
   <v-app>
     <v-navigation-drawer app id="drawer" v-model="drawer">
       <v-list nav>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-home</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title class="title">
-              <router-link to="project">Home</router-link>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <router-link to="/project">
+          <v-list-item link>
+            <v-list-item-icon>
+              <v-icon>mdi-home</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title class="title">
+                Home
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
       </v-list>
       <v-list dense nav subheader>
         <v-subheader>File</v-subheader>
         <v-divider></v-divider>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-file-plus</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>
-              <router-link to="/">New Project</router-link>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <router-link to="/">
+          <v-list-item link>
+            <v-list-item-icon>
+              <v-icon>mdi-file-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                New Project
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
         <v-list-item link>
           <v-list-item-icon>
             <v-icon>mdi-file-document</v-icon>
@@ -50,40 +54,46 @@
       <v-list dense nav subheader>
         <v-subheader>Edit</v-subheader>
         <v-divider></v-divider>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-credit-card-plus</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>
-              <router-link to="addScene">Add Scene</router-link>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-credit-card-plus</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>
-              <router-link to="addActBreak">Add Act Break</router-link>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <router-link to="addScene">
+          <v-list-item link>
+            <v-list-item-icon>
+              <v-icon>mdi-credit-card-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                Add Scene
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+        <router-link to="addActBreak">
+          <v-list-item link>
+            <v-list-item-icon>
+              <v-icon>mdi-credit-card-plus</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                Add Act Break
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
       </v-list>
       <v-list dense nav subheader>
         <v-subheader>Settings</v-subheader>
         <v-divider></v-divider>
-        <v-list-item link>
-          <v-list-item-icon>
-            <v-icon>mdi-settings</v-icon>
-          </v-list-item-icon>
-          <v-list-item-content>
-            <v-list-item-title>
-              <router-link to="settings">Project Settings</router-link>
-            </v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+        <router-link to="settings">
+          <v-list-item link>
+            <v-list-item-icon>
+              <v-icon>mdi-settings</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                Project Settings
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
       </v-list>
     </v-navigation-drawer>
 
@@ -120,10 +130,7 @@ export default Vue.extend({
   methods: {
     getFilename() {
       // TODO make this strip out any unusable characters
-      return this.project.title + ".json";
-    },
-    hasFocus(element) {
-      return element === document.activeElement;
+      return this.project.settings.title + ".json";
     },
     openFile(event) {
       const target = event.target;

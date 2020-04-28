@@ -2,12 +2,12 @@
   <v-container>
     <v-row>
       <v-col>
-        <v-form>
+        <v-form @submit.prevent="editScene">
           <div>
             <h1 class="d-inline-block font-weight-light">
-              Add Scene
+              Edit Scene
             </h1>
-            <router-link to="project">
+            <router-link to="/project">
               <v-tooltip bottom>
                 <template #activator="{ on }">
                   <v-btn
@@ -38,27 +38,7 @@
             label="Status"
             v-model="statusId"
           ></v-select>
-          <v-tooltip top>
-            <template #activator="{ on }">
-              <v-btn
-                class="mr-4"
-                @click="addScene(false)"
-                color="primary"
-                v-on="on"
-              >
-                Submit
-              </v-btn>
-            </template>
-            <span>Submit and return to project view</span>
-          </v-tooltip>
-          <v-tooltip top>
-            <template #activator="{ on }">
-              <v-btn @click="addScene(true)" v-on="on">
-                <v-icon>mdi-plus</v-icon> Submit
-              </v-btn>
-            </template>
-            <span>Submit and add another scene</span>
-          </v-tooltip>
+          <v-btn color="primary" type="submit">Submit</v-btn>
         </v-form>
       </v-col>
     </v-row>
@@ -68,15 +48,28 @@
 <script>
 import Vue from "vue";
 import * as _ from "lodash";
-import { Scene } from "../classes/Scene";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
   computed: {
-    ...mapState(["project"])
+    ...mapState(["project"]),
+    scene() {
+      if (this.id) {
+        return this.project.cards[
+          _.findIndex(this.project.cards, ["id", this.id])
+        ];
+      }
+      return null;
+    }
   },
   created() {
     this.statusId = this.project.settings.statuses[0].id;
+    if (this.scene) {
+      this.description = this.scene.description;
+      this.isPlot = this.scene.isPlot;
+      this.statusId = this.scene.status.id;
+      this.title = this.scene.title;
+    }
   },
   data() {
     return {
@@ -87,23 +80,20 @@ export default Vue.extend({
     };
   },
   methods: {
-    ...mapMutations(["ADD_CARD"]),
-    addScene(stay) {
-      this.ADD_CARD(
-        new Scene(
-          this.description,
-          this.isPlot,
-          this.findStatus(this.statusId),
-          this.title
-        )
-      );
+    ...mapMutations(["EDIT_CARD"]),
+    editScene() {
+      this.EDIT_CARD({
+        description: this.description,
+        id: this.id,
+        isPlot: this.isPlot,
+        status: this.findStatus(this.statusId),
+        title: this.title
+      });
       this.description = "";
       this.isPlot = false;
       this.statusId = this.project.settings.statuses[0].id;
       this.title = "";
-      if (!stay) {
-        this.$router.push("/project");
-      }
+      this.$router.push("/project");
     },
     findStatus(id) {
       return this.project.settings.statuses[
@@ -111,6 +101,7 @@ export default Vue.extend({
       ];
     }
   },
-  name: "AddScene"
+  name: "EditScene",
+  props: ["id"]
 });
 </script>

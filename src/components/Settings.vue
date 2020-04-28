@@ -69,7 +69,7 @@
               <span>Remove Status</span>
             </v-tooltip>
           </div>
-          <v-btn color="primary" type="submit">Save</v-btn>
+          <v-btn color="primary" type="submit">Submit</v-btn>
         </v-form>
       </v-col>
     </v-row>
@@ -88,7 +88,7 @@ export default Vue.extend({
   },
   created() {
     this.settings.statuses = this.getStatuses();
-    this.settings.title = this.project.title;
+    this.settings.title = this.project.settings.title;
   },
   data() {
     return {
@@ -114,15 +114,6 @@ export default Vue.extend({
       }
       return statuses;
     },
-    // getStatusObjects() {
-    //   const objects = [];
-    //   for (let i = 0; i < this.project.statuses.length; i++) {
-    //     objects.push(
-    //       new Status(this.project.statuses[i].getColor(), this.project.statuses[i].getName())
-    //     );
-    //   }
-    //   return objects;
-    // },
     removeStatus(status) {
       // TODO ask for confirmation first
       Vue.set(
@@ -133,9 +124,9 @@ export default Vue.extend({
       this.$forceUpdate();
     },
     submit() {
-      this.SET_STATUSES(this.settings.statuses);
-      this.SET_TITLE(this.settings.title);
-      this.$router.push("project");
+      // this.SET_STATUSES(this.settings.statuses);
+      // this.SET_TITLE(this.settings.title);
+      this.$router.push("/project");
     }
   },
   name: "Settings"

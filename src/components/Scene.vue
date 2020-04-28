@@ -1,22 +1,50 @@
 <template>
   <v-card
     class="index-card"
-    @dblclick="editScene"
     :style="{ 'background-color': scene.status.color }"
   >
-    <v-card-title>
-      <span>{{ scene.title }}</span>
-      <v-spacer></v-spacer>
-      <v-tooltip top>
-        <template #activator="{ on }">
-          <v-icon :class="{ 'is-plot': isPlot }" v-on="on">
-            {{ icon }}
-          </v-icon>
-        </template>
-        <span>{{ isPlot ? "Plot Scene" : "Filler Scene" }}</span>
-      </v-tooltip>
-    </v-card-title>
-    <v-card-text>{{ scene.description }}</v-card-text>
+    <v-container>
+      <v-row>
+        <v-col class="px-0" cols="auto">
+          <v-card-title>
+            <span>{{ scene.title }}</span>
+            <v-spacer></v-spacer>
+            <v-tooltip top>
+              <template #activator="{ on }">
+                <v-icon :class="{ 'is-plot': scene.isPlot }" v-on="on">
+                  {{ icon }}
+                </v-icon>
+              </template>
+              <span>{{ scene.isPlot ? "Plot Scene" : "Filler Scene" }}</span>
+            </v-tooltip>
+          </v-card-title>
+          <v-card-text>{{ scene.description }}</v-card-text>
+        </v-col>
+        <v-divider vertical></v-divider>
+        <v-col class="px-0" cols="auto">
+          <v-row>
+            <v-tooltip top>
+              <template #activator="{ on }">
+                <v-btn @click="removeCard" icon v-on="on">
+                  <v-icon>mdi-trash-can</v-icon>
+                </v-btn>
+              </template>
+              <span>Remove Card</span>
+            </v-tooltip>
+          </v-row>
+          <v-row>
+            <v-tooltip top>
+              <template #activator="{ on }">
+                <v-btn @click="editScene" icon v-on="on">
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </template>
+              <span>Edit Card</span>
+            </v-tooltip>
+          </v-row>
+        </v-col>
+      </v-row>
+    </v-container>
   </v-card>
 </template>
 
@@ -27,19 +55,18 @@ import { mapMutations } from "vuex";
 export default Vue.extend({
   computed: {
     icon() {
-      return this.isPlot ? "mdi-star" : "mdi-star-outline";
-    },
-    isPlot() {
-      return this.scene.isPlot;
+      return this.scene.isPlot ? "mdi-star" : "mdi-star-outline";
     }
   },
   methods: {
-    ...mapMutations(["REMOVE_SCENE"]),
+    ...mapMutations(["REMOVE_CARD"]),
     editScene() {
-      this.$router.push("addScene");
+      this.$router.push("editScene/" + this.scene.id);
     },
-    removeScene() {
-      this.REMOVE_SCENE(this.scene);
+    removeCard() {
+      if (confirm("Are you sure you want to remove this card?")) {
+        this.REMOVE_CARD(this.scene);
+      }
     }
   },
   name: "Scene",
