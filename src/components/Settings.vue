@@ -113,12 +113,14 @@ export default Vue.extend({
     getStatuses() {
       const statuses = [];
       for (let i = 0; i < this.displayStatuses.length; i++) {
-        // TODO use Status objects here?
-        statuses.push({
-          color: this.displayStatuses[i].color,
-          id: this.displayStatuses[i].id,
-          name: this.displayStatuses[i].name
-        });
+        const status = new Status(
+          this.displayStatuses[i].color,
+          true,
+          this.displayStatuses[i].name
+        );
+        // Preserve the ID here because we'll need it to update the statuses on the Scenes
+        status.id = this.displayStatuses[i].id;
+        statuses.push(status);
       }
       return statuses;
     },

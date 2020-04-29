@@ -2,8 +2,9 @@ import Vue from "vue";
 import Vuex from "vuex";
 import * as _ from "lodash";
 import { defaultProject } from "../classes/Project";
-import { noStatus, Status } from "../classes/Status";
+import { noStatus } from "../classes/Status";
 import { Settings } from "../classes/Settings";
+import { ActBreak } from "../classes/ActBreak";
 
 Vue.use(Vuex);
 
@@ -34,22 +35,26 @@ export default new Vuex.Store({
     },
     MODIFY_PROJECT: (state, project) => (state.project = project),
     MODIFY_SETTINGS: (state, settings) => {
-      const statusObjects = [];
-      for (let i = 0; i < settings.statuses.length; i++) {
-        statusObjects.push(
-          new Status(
-            settings.statuses[i].color,
-            true,
-            settings.statuses[i].name
-          )
-        );
-        // Preserve the status ID
-        statusObjects[statusObjects.length - 1].id = settings.statuses[i].id;
-      }
       state.project.settings = new Settings(
-        _.union([noStatus], statusObjects), // Preserve the noStatus
+        _.union([noStatus], settings.statuses), // Preserve the noStatus
         settings.title
       );
+      // Update the statuses on the Scene objects as well
+      for (let i = 0; i < state.project.cards.length; i++) {
+        if (state.project.cards[i] instanceof ActBreak) {
+          continue;
+        }
+        const index = _.findIndex(state.project.settings.statuses, [
+          "id",
+          state.project.cards[i].status.id
+        ]);
+        /*
+         * Status not found? Must have been removed, assign the noStatus.
+         * Otherwise reassign the status so the scene gets any updated values.
+         */
+        state.project.cards[i].status =
+          index === -1 ? noStatus : state.project.settings.statuses[index];
+      }
     },
     MOVE_CARD: (state, card, index) => {
       Vue.set(
