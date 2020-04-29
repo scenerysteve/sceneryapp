@@ -53,7 +53,7 @@ import { mapMutations, mapState } from "vuex";
 export default Vue.extend({
   computed: {
     ...mapState(["project"]),
-    scene() {
+    card() {
       if (this.id) {
         return this.project.cards[
           _.findIndex(this.project.cards, ["id", this.id])
@@ -64,6 +64,7 @@ export default Vue.extend({
   },
   created() {
     this.statusId = this.project.settings.statuses[0].id;
+    // TODO what was I doing here? No longer needed or what?
     if (this.scene) {
       this.description = this.scene.description;
       this.isPlot = this.scene.isPlot;

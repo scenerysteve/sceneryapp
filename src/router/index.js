@@ -2,6 +2,7 @@ import Vue from "vue";
 import VueRouter from "vue-router";
 import AddScene from "../components/AddScene.vue";
 import AddActBreak from "../components/AddActBreak.vue";
+import EditActBreak from "../components/EditActBreak";
 import EditScene from "../components/EditScene.vue";
 import Project from "../components/Project.vue";
 import Settings from "../components/Settings.vue";
@@ -19,6 +20,12 @@ export default new VueRouter({
       component: AddScene,
       name: "Add Scene",
       path: "/addScene"
+    },
+    {
+      component: EditActBreak,
+      name: "Edit Act Break",
+      path: "/editActBreak/:id",
+      props: true
     },
     {
       component: EditScene,

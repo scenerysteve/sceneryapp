@@ -59,9 +59,8 @@
     <v-row class="full" no-gutters>
       <v-col class="full">
         <div class="full project">
-          <!-- TODO figure out how to display act breaks -->
           <div class="ma-4" :key="card.id" v-for="card in filteredCards">
-            <Scene :scene="card" />
+            <Card :card="card" />
           </div>
         </div>
       </v-col>
@@ -73,11 +72,12 @@
 import Vue from "vue";
 import * as _ from "lodash";
 import { mapState } from "vuex";
-import Scene from "./Scene.vue";
-import { Scene as SceneObj } from "../classes/Scene";
+import Card from "./Card.vue";
+import { ActBreak } from "../classes/ActBreak";
+import { Scene } from "../classes/Scene";
 
 export default Vue.extend({
-  components: { Scene },
+  components: { Card },
   computed: {
     ...mapState(["project"]),
     filteredCards() {
@@ -105,10 +105,11 @@ export default Vue.extend({
   methods: {
     filter(card) {
       return (
-        card instanceof SceneObj &&
-        ((this.filters.plot && card.isPlot) ||
-          (this.filters.filler && !card.isPlot)) &&
-        this.filters.statuses[card.status.name]
+        (card instanceof Scene &&
+          ((this.filters.plot && card.isPlot) ||
+            (this.filters.filler && !card.isPlot)) &&
+          this.filters.statuses[card.status.name]) ||
+        card instanceof ActBreak
       );
     },
     resetFilters() {

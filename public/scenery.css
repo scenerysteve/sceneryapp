@@ -8,20 +8,20 @@
   height: 100%;
 }
 
-.index-card {
-  height: 195px;
-  width: 350px;
-  /*min-width: 325px;*/
-}
-
 .is-plot {
   color: gold !important;
 }
 
 .project {
   align-content: start;
+  align-items: center;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 32px;
+}
+
+.scene {
+  /*height: 195px;*/
+  /*width: 325px;*/
 }
