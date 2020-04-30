@@ -30,6 +30,7 @@ export default Vue.extend({
     ...mapState(["project"])
   },
   created() {
+    // TODO Find out why these values are being saved even when the form is not submitted
     this.settings.statuses = this.displayStatuses;
     this.settings.title = this.project.settings.title;
     this.eventListener.$on("addStatus", this.addStatus);
