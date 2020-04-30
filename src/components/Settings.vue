@@ -1,77 +1,13 @@
 <template>
   <v-container>
+    <form-header />
     <v-row>
       <v-col>
         <v-form @submit.prevent="submit">
-          <div>
-            <h1 class="d-inline-block font-weight-light">{{ $route.name }}</h1>
-            <router-link to="project">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    class="float-right"
-                    color="primary"
-                    icon
-                    large
-                    v-on="on"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                </template>
-                <span>Return to Project View</span>
-              </v-tooltip>
-            </router-link>
-          </div>
-          <v-text-field
-            autofocus
-            label="Title"
-            v-model="settings.title"
-          ></v-text-field>
-          <h2 class="font-weight-light mb-4">Statuses</h2>
-          <div
-            class="d-flex justify-space-between"
-            :key="status.id"
-            v-for="status in settings.statuses"
-          >
-            <v-tooltip top>
-              <template #activator="{ on }">
-                <v-btn
-                  @click="colorInputClick(status.id)"
-                  elevation="3"
-                  icon
-                  large
-                  :style="{ 'background-color': status.color }"
-                  v-on="on"
-                >
-                  <v-icon>mdi-format-color-fill</v-icon>
-                </v-btn>
-              </template>
-              <span>Color {{ status.color }}</span>
-            </v-tooltip>
-            <input
-              :id="'color-input-' + status.id"
-              style="visibility: hidden;"
-              type="color"
-              v-model="status.color"
-            />
-            <v-text-field label="Name" v-model="status.name"></v-text-field>
-            <v-tooltip top>
-              <template #activator="{ on }">
-                <v-btn @click="removeStatus(status)" icon large v-on="on">
-                  <v-icon>mdi-trash-can</v-icon>
-                </v-btn>
-              </template>
-              <span>Remove Status</span>
-            </v-tooltip>
-          </div>
-          <div class="mb-4">
-            <v-btn class="mr-4" @click="addStatus">
-              <v-icon class="mr-1">mdi-plus-circle-outline</v-icon> Add Status
-            </v-btn>
-            <v-btn @click="removeAllStatuses" color="error">
-              <v-icon class="mr-1">mdi-minus-circle-outline</v-icon> Remove All
-            </v-btn>
-          </div>
+          <modify-settings
+            :event-listener="eventListener"
+            :settings="settings"
+          />
           <v-btn color="primary" type="submit">Submit</v-btn>
         </v-form>
       </v-col>
@@ -81,11 +17,14 @@
 
 <script>
 import * as _ from "lodash";
+import FormHeader from "./FormHeader";
+import ModifySettings from "./ModifySettings";
 import { Status } from "../classes/Status";
 import Vue from "vue";
 import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
+  components: { FormHeader, ModifySettings },
   computed: {
     ...mapGetters(["displayStatuses"]),
     ...mapState(["project"])
@@ -93,9 +32,13 @@ export default Vue.extend({
   created() {
     this.settings.statuses = this.displayStatuses;
     this.settings.title = this.project.settings.title;
+    this.eventListener.$on("addStatus", this.addStatus);
+    this.eventListener.$on("removeAllStatuses", this.removeAllStatuses);
+    this.eventListener.$on("removeStatus", this.removeStatus);
   },
   data() {
     return {
+      eventListener: new Vue({}),
       settings: {
         statuses: [],
         title: ""
@@ -113,20 +56,17 @@ export default Vue.extend({
         })
       );
     },
-    colorInputClick(statusId) {
-      document.getElementById("color-input-" + statusId).click();
-    },
     removeAllStatuses() {
       if (confirm("Are you sure you want to remove all statuses?")) {
         this.settings.statuses = [];
       }
     },
-    removeStatus(status) {
+    removeStatus(statusId) {
       if (confirm("Are you sure you want to remove this status?")) {
         Vue.set(
           this.settings,
           "statuses",
-          _.pull(this.settings.statuses, status)
+          _.pull(this.settings.statuses, statusId)
         );
         this.$forceUpdate();
       }
