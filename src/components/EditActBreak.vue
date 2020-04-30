@@ -1,33 +1,10 @@
 <template>
   <v-container>
+    <form-header />
     <v-row>
       <v-col>
         <v-form @submit.prevent="editActBreak">
-          <div>
-            <h1 class="d-inline-block font-weight-light">Edit Act Break</h1>
-            <router-link to="/project">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    class="float-right"
-                    color="primary"
-                    icon
-                    large
-                    v-on="on"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                </template>
-                <span>Return to Project View</span>
-              </v-tooltip>
-            </router-link>
-          </div>
-          <v-text-field
-            label="Act"
-            min="1"
-            type="number"
-            v-model="actBreak.act"
-          ></v-text-field>
+          <modify-act-break :act-break="actBreak" />
           <v-btn color="primary" type="submit">Submit</v-btn>
         </v-form>
       </v-col>
@@ -36,12 +13,15 @@
 </template>
 
 <script>
-import Vue from "vue";
-import * as _ from "lodash";
 import { ActBreak } from "../classes/ActBreak";
+import ModifyActBreak from "./ModifyActBreak";
+import FormHeader from "./FormHeader";
+import * as _ from "lodash";
+import Vue from "vue";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
+  components: { FormHeader, ModifyActBreak },
   computed: {
     ...mapState(["project"])
   },

@@ -1,43 +1,11 @@
 <template>
   <v-container>
+    <form-header />
     <v-row>
       <v-col>
         <v-form @submit.prevent="editScene">
-          <div>
-            <h1 class="d-inline-block font-weight-light">
-              Edit Scene
-            </h1>
-            <router-link to="/project">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    class="float-right"
-                    color="primary"
-                    icon
-                    large
-                    v-on="on"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                </template>
-                <span>Return to Project View</span>
-              </v-tooltip>
-            </router-link>
-          </div>
-          <v-text-field label="Title" v-model="scene.title"></v-text-field>
-          <v-textarea
-            filled
-            label="Description"
-            v-model="scene.description"
-          ></v-textarea>
-          <v-switch label="Plot Scene" v-model="scene.isPlot"></v-switch>
-          <v-select
-            :items="project.settings.statuses"
-            item-text="name"
-            item-value="id"
-            label="Status"
-            v-model="scene.statusId"
-          ></v-select>
+          <!-- TODO fix up markup with containers and whatnot -->
+          <modify-scene :scene="scene" />
           <v-btn color="primary" type="submit">Submit</v-btn>
         </v-form>
       </v-col>
@@ -46,13 +14,16 @@
 </template>
 
 <script>
-import Vue from "vue";
 import * as _ from "lodash";
+import FormHeader from "./FormHeader";
+import ModifyScene from "./ModifyScene";
 import { Scene } from "../classes/Scene";
 import { noStatus } from "../classes/Status";
+import Vue from "vue";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
+  components: { FormHeader, ModifyScene },
   computed: {
     ...mapState(["project"]),
     card() {

@@ -1,44 +1,10 @@
 <template>
-  <!-- TODO Break out this markup into ModifyScene component that can be shared by add and edit components -->
   <v-container>
+    <form-header />
     <v-row>
       <v-col>
         <v-form>
-          <div>
-            <h1 class="d-inline-block font-weight-light">
-              Add Scene
-            </h1>
-            <router-link to="project">
-              <v-tooltip bottom>
-                <template #activator="{ on }">
-                  <v-btn
-                    class="float-right"
-                    color="primary"
-                    icon
-                    large
-                    v-on="on"
-                  >
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                </template>
-                <span>Return to Project View</span>
-              </v-tooltip>
-            </router-link>
-          </div>
-          <v-text-field label="Title" v-model="title"></v-text-field>
-          <v-textarea
-            filled
-            label="Description"
-            v-model="description"
-          ></v-textarea>
-          <v-switch label="Plot Scene" v-model="isPlot"></v-switch>
-          <v-select
-            :items="project.settings.statuses"
-            item-text="name"
-            item-value="id"
-            label="Status"
-            v-model="statusId"
-          ></v-select>
+          <modify-scene :scene="scene" />
           <v-tooltip top>
             <template #activator="{ on }">
               <v-btn
@@ -67,25 +33,30 @@
 </template>
 
 <script>
-import Vue from "vue";
 import * as _ from "lodash";
+import FormHeader from "./FormHeader";
+import ModifyScene from "./ModifyScene";
 import { Scene } from "../classes/Scene";
 import { noStatus } from "../classes/Status";
+import Vue from "vue";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
+  components: { FormHeader, ModifyScene },
   computed: {
     ...mapState(["project"])
   },
   created() {
-    this.statusId = noStatus.id;
+    this.scene.statusId = noStatus.id;
   },
   data() {
     return {
-      description: "",
-      isPlot: false,
-      statusId: null,
-      title: ""
+      scene: {
+        description: "",
+        isPlot: false,
+        statusId: null,
+        title: ""
+      }
     };
   },
   methods: {
@@ -93,16 +64,16 @@ export default Vue.extend({
     addScene(stay) {
       this.ADD_CARD(
         new Scene({
-          description: this.description,
-          isPlot: this.isPlot,
-          status: this.findStatus(this.statusId),
-          title: this.title
+          description: this.scene.description,
+          isPlot: this.scene.isPlot,
+          status: this.findStatus(this.scene.statusId),
+          title: this.scene.title
         })
       );
-      this.description = "";
-      this.isPlot = false;
-      this.statusId = noStatus.id;
-      this.title = "";
+      this.scene.description = "";
+      this.scene.isPlot = false;
+      this.scene.statusId = noStatus.id;
+      this.scene.title = "";
       if (!stay) {
         this.$router.push("/project");
       }

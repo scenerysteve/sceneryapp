@@ -15,7 +15,6 @@
             <v-expansion-panel-content>
               <v-form>
                 <v-switch
-                  class="mt-0"
                   dense
                   label="Act Breaks"
                   v-model="filters.actBreaks"
