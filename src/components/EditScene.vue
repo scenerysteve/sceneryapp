@@ -24,19 +24,19 @@
               </v-tooltip>
             </router-link>
           </div>
-          <v-text-field label="Title" v-model="title"></v-text-field>
+          <v-text-field label="Title" v-model="scene.title"></v-text-field>
           <v-textarea
             filled
             label="Description"
-            v-model="description"
+            v-model="scene.description"
           ></v-textarea>
-          <v-switch label="Plot Scene" v-model="isPlot"></v-switch>
+          <v-switch label="Plot Scene" v-model="scene.isPlot"></v-switch>
           <v-select
             :items="project.settings.statuses"
             item-text="name"
             item-value="id"
             label="Status"
-            v-model="statusId"
+            v-model="scene.statusId"
           ></v-select>
           <v-btn color="primary" type="submit">Submit</v-btn>
         </v-form>
@@ -48,6 +48,8 @@
 <script>
 import Vue from "vue";
 import * as _ from "lodash";
+import { Scene } from "../classes/Scene";
+import { noStatus } from "../classes/Status";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
@@ -63,36 +65,40 @@ export default Vue.extend({
     }
   },
   created() {
-    this.statusId = this.project.settings.statuses[0].id;
-    // TODO what was I doing here? No longer needed or what?
-    if (this.scene) {
-      this.description = this.scene.description;
-      this.isPlot = this.scene.isPlot;
-      this.statusId = this.scene.status.id;
-      this.title = this.scene.title;
+    if (this.card) {
+      this.scene.description = this.card.description;
+      this.scene.id = this.card.id;
+      this.scene.isPlot = this.card.isPlot;
+      this.scene.statusId = this.card.status.id;
+      this.scene.title = this.card.title;
     }
   },
   data() {
     return {
-      description: "",
-      isPlot: false,
-      statusId: null,
-      title: ""
+      scene: {
+        description: "",
+        id: "",
+        isPlot: false,
+        statusId: noStatus.id,
+        title: ""
+      }
     };
   },
   methods: {
     ...mapMutations(["EDIT_CARD"]),
     editScene() {
-      this.EDIT_CARD({
-        description: this.description,
-        id: this.id,
-        isPlot: this.isPlot,
-        status: this.findStatus(this.statusId),
-        title: this.title
-      });
+      this.EDIT_CARD(
+        new Scene({
+          description: this.scene.description,
+          id: this.scene.id,
+          isPlot: this.scene.isPlot,
+          status: this.findStatus(this.scene.statusId),
+          title: this.scene.title
+        })
+      );
       this.description = "";
       this.isPlot = false;
-      this.statusId = this.project.settings.statuses[0].id;
+      this.statusId = noStatus.id;
       this.title = "";
       this.$router.push("/project");
     },

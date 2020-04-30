@@ -1,23 +1,23 @@
 import { Card } from "./Card";
-import { defaultStatuses } from "./Status";
+import * as _ from "lodash";
+import { defaultStatuses, noStatus } from "./Status";
 
 export class Scene extends Card {
-  constructor(description, isPlot, status, title) {
+  constructor(parameters) {
     super();
-    this.edit(description, isPlot, status, title);
-  }
-
-  edit(description, isPlot, status, title) {
-    this.description = description;
-    this.isPlot = isPlot;
-    this.status = status;
-    this.title = title;
+    this.description = _.has(parameters, "description")
+      ? parameters.description
+      : "";
+    this.id = _.has(parameters, "id") ? parameters.id : this.id;
+    this.isPlot = _.has(parameters, "isPlot") ? parameters.isPlot : false;
+    this.status = _.has(parameters, "status") ? parameters.status : noStatus;
+    this.title = _.has(parameters, "title") ? parameters.title : "";
   }
 }
 
-export const defaultScene = new Scene(
-  "Add a longer scene description here.",
-  true,
-  defaultStatuses[1], // Not written
-  "Add a title here"
-);
+export const defaultScene = new Scene({
+  description: "Add a longer scene description here.",
+  isPlot: true,
+  status: defaultStatuses[1], // Not written
+  title: "Add a title here"
+});

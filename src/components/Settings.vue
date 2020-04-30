@@ -80,10 +80,10 @@
 </template>
 
 <script>
-import Vue from "vue";
 import * as _ from "lodash";
-import { mapGetters, mapMutations, mapState } from "vuex";
 import { Status } from "../classes/Status";
+import Vue from "vue";
+import { mapGetters, mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
   computed: {
@@ -91,7 +91,7 @@ export default Vue.extend({
     ...mapState(["project"])
   },
   created() {
-    this.settings.statuses = this.getStatuses();
+    this.settings.statuses = this.displayStatuses;
     this.settings.title = this.project.settings.title;
   },
   data() {
@@ -105,24 +105,16 @@ export default Vue.extend({
   methods: {
     ...mapMutations(["MODIFY_SETTINGS"]),
     addStatus() {
-      this.settings.statuses.push(new Status("#ffffff", true, "New Status"));
+      this.settings.statuses.push(
+        new Status({
+          color: "#ffffff",
+          display: true,
+          name: "New Status"
+        })
+      );
     },
     colorInputClick(statusId) {
       document.getElementById("color-input-" + statusId).click();
-    },
-    getStatuses() {
-      const statuses = [];
-      for (let i = 0; i < this.displayStatuses.length; i++) {
-        const status = new Status(
-          this.displayStatuses[i].color,
-          true,
-          this.displayStatuses[i].name
-        );
-        // Preserve the ID here because we'll need it to update the statuses on the Scenes
-        status.id = this.displayStatuses[i].id;
-        statuses.push(status);
-      }
-      return statuses;
     },
     removeAllStatuses() {
       if (confirm("Are you sure you want to remove all statuses?")) {

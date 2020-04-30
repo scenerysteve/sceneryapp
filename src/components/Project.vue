@@ -9,24 +9,38 @@
     </v-row>
     <v-row no-gutters>
       <v-col>
-        <v-expansion-panels>
+        <v-expansion-panels focusable>
           <v-expansion-panel>
             <v-expansion-panel-header>Filters</v-expansion-panel-header>
             <v-expansion-panel-content>
               <v-form>
-                <v-checkbox
+                <v-switch
                   class="mt-0"
                   dense
+                  label="Act Breaks"
+                  v-model="filters.actBreaks"
+                ></v-switch>
+                <v-switch
+                  class="mt-0"
+                  dense
+                  label="Scenes"
+                  v-model="filters.scenes"
+                ></v-switch>
+                <v-switch
+                  class="mt-0"
+                  dense
+                  :disabled="!filters.scenes"
                   label="Plot Scenes"
                   v-model="filters.plot"
-                ></v-checkbox>
-                <v-checkbox
+                ></v-switch>
+                <v-switch
                   class="mt-0"
                   dense
+                  :disabled="!filters.scenes"
                   label="Filler Scenes"
                   v-model="filters.filler"
-                ></v-checkbox>
-                <v-expansion-panels>
+                ></v-switch>
+                <v-expansion-panels :disabled="!filters.scenes" focusable>
                   <v-expansion-panel>
                     <v-expansion-panel-header>
                       Statuses
@@ -69,12 +83,12 @@
 </template>
 
 <script>
-import Vue from "vue";
-import * as _ from "lodash";
-import { mapState } from "vuex";
-import Card from "./Card.vue";
 import { ActBreak } from "../classes/ActBreak";
+import Card from "./Card.vue";
+import * as _ from "lodash";
 import { Scene } from "../classes/Scene";
+import Vue from "vue";
+import { mapState } from "vuex";
 
 export default Vue.extend({
   components: { Card },
@@ -96,8 +110,10 @@ export default Vue.extend({
   data() {
     return {
       filters: {
-        plot: true,
+        actBreaks: true,
         filler: true,
+        plot: true,
+        scenes: true,
         statuses: {}
       }
     };
@@ -106,15 +122,18 @@ export default Vue.extend({
     filter(card) {
       return (
         (card instanceof Scene &&
+          this.filters.scenes &&
           ((this.filters.plot && card.isPlot) ||
             (this.filters.filler && !card.isPlot)) &&
           this.filters.statuses[card.status.name]) ||
-        card instanceof ActBreak
+        (card instanceof ActBreak && this.filters.actBreaks)
       );
     },
     resetFilters() {
-      this.filters.plot = true;
+      this.filters.actBreaks = true;
       this.filters.filler = true;
+      this.filters.plot = true;
+      this.filters.scenes = true;
       Vue.set(
         this.filters,
         "statuses",

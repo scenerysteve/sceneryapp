@@ -63,10 +63,12 @@ export default Vue.extend({
   methods: {
     ...mapMutations(["EDIT_CARD"]),
     editActBreak() {
-      // TODO don't like it, but I might as well give these objects a constructor to pass the ID
-      const actBreak = new ActBreak(this.actBreak.act);
-      actBreak.id = this.actBreak.id;
-      this.EDIT_CARD(actBreak);
+      this.EDIT_CARD(
+        new ActBreak({
+          act: this.actBreak.act,
+          id: this.actBreak.id
+        })
+      );
       this.$router.push("/project");
     }
   },

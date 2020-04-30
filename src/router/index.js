@@ -1,11 +1,11 @@
-import Vue from "vue";
-import VueRouter from "vue-router";
-import AddScene from "../components/AddScene.vue";
 import AddActBreak from "../components/AddActBreak.vue";
+import AddScene from "../components/AddScene.vue";
 import EditActBreak from "../components/EditActBreak";
 import EditScene from "../components/EditScene.vue";
 import Project from "../components/Project.vue";
 import Settings from "../components/Settings.vue";
+import Vue from "vue";
+import VueRouter from "vue-router";
 
 Vue.use(VueRouter);
 

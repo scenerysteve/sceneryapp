@@ -52,7 +52,7 @@ export default Vue.extend({
   methods: {
     ...mapMutations(["ADD_CARD"]),
     addActBreak() {
-      this.ADD_CARD(new ActBreak(this.act));
+      this.ADD_CARD(new ActBreak({ act: this.act }));
       this.$router.push("/project");
     }
   },

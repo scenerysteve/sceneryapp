@@ -1,25 +1,46 @@
+import * as _ from "lodash";
 import { v4 as uuidv4 } from "uuid";
 
 export class Status {
-  constructor(color, display, name) {
-    this.id = uuidv4();
-    this.edit(color, display, name);
-  }
-
-  edit(color, display, name) {
-    this.color = color;
-    this.display = display;
-    this.name = name;
+  constructor(parameters) {
+    this.color = _.has(parameters, "color") ? parameters.color : "#ffffff";
+    this.display = _.has(parameters, "display") ? parameters.display : true;
+    this.id = _.has(parameters, "id") ? parameters.id : uuidv4();
+    this.name = _.has(parameters, "name") ? parameters.name : "New Status";
   }
 }
 
-export const noStatus = new Status("#ffffff", false, "No Status");
+export const noStatus = new Status({
+  color: "#ffffff",
+  display: false,
+  name: "No Status"
+});
 
 export const defaultStatuses = [
   noStatus,
-  new Status("#ffffff", true, "Not Written"),
-  new Status("#dcffdc", true, "Completed"),
-  new Status("#dcdcff", true, "Partially Written"),
-  new Status("#ffffdc", true, "Needs Rewrites"),
-  new Status("#ffdcdc", true, "Possibly Unnecessary")
+  new Status({
+    color: "#ffffff",
+    display: true,
+    name: "Not Written"
+  }),
+  new Status({
+    color: "#dcffdc",
+    display: true,
+    name: "Completed"
+  }),
+  new Status({
+    color: "#dcdcff",
+    display: true,
+    name: "Partially Written"
+  }),
+  new Status({
+    color: "#ffffdc",
+    display: true,
+    name: "Needs Rewrites"
+  }),
+  new Status({
+    color: "#ffdcdc",
+    display: true,
+    name: "Possibly Unnecessary"
+  })
 ];

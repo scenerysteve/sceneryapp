@@ -1,4 +1,5 @@
 <template>
+  <!-- TODO Break out this markup into ModifyScene component that can be shared by add and edit components -->
   <v-container>
     <v-row>
       <v-col>
@@ -69,6 +70,7 @@
 import Vue from "vue";
 import * as _ from "lodash";
 import { Scene } from "../classes/Scene";
+import { noStatus } from "../classes/Status";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
@@ -76,7 +78,7 @@ export default Vue.extend({
     ...mapState(["project"])
   },
   created() {
-    this.statusId = this.project.settings.statuses[0].id;
+    this.statusId = noStatus.id;
   },
   data() {
     return {
@@ -90,16 +92,16 @@ export default Vue.extend({
     ...mapMutations(["ADD_CARD"]),
     addScene(stay) {
       this.ADD_CARD(
-        new Scene(
-          this.description,
-          this.isPlot,
-          this.findStatus(this.statusId),
-          this.title
-        )
+        new Scene({
+          description: this.description,
+          isPlot: this.isPlot,
+          status: this.findStatus(this.statusId),
+          title: this.title
+        })
       );
       this.description = "";
       this.isPlot = false;
-      this.statusId = this.project.settings.statuses[0].id;
+      this.statusId = noStatus.id;
       this.title = "";
       if (!stay) {
         this.$router.push("/project");
