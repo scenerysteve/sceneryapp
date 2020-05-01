@@ -77,6 +77,6 @@ export default Vue.extend({
       this.$router.push("/project");
     }
   },
-  name: "Settings"
+  name: "EditSettings"
 });
 </script>

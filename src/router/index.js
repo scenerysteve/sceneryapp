@@ -2,8 +2,9 @@ import AddActBreak from "../components/AddActBreak.vue";
 import AddScene from "../components/AddScene.vue";
 import EditActBreak from "../components/EditActBreak";
 import EditScene from "../components/EditScene.vue";
+import EditSettings from "../components/EditSettings.vue";
+import NewProject from "../components/NewProject";
 import Project from "../components/Project.vue";
-import Settings from "../components/Settings.vue";
 import Vue from "vue";
 import VueRouter from "vue-router";
 
@@ -34,7 +35,7 @@ export default new VueRouter({
       props: true
     },
     {
-      component: Settings,
+      component: NewProject,
       name: "New Project",
       path: "/"
     },
@@ -44,7 +45,7 @@ export default new VueRouter({
       path: "/project"
     },
     {
-      component: Settings,
+      component: EditSettings,
       name: "Project Settings",
       path: "/settings"
     }

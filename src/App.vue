@@ -30,23 +30,24 @@
             </v-list-item-content>
           </v-list-item>
         </router-link>
-        <v-list-item link>
+        <v-list-item @click="openProject" link>
           <v-list-item-icon>
             <v-icon>mdi-file-document</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <div @click.stop="openProject">Open Project</div>
+              Open Project
+              <input id="open-project" style="display: none;" type="file" />
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-        <v-list-item link>
+        <v-list-item @click="saveProject" link>
           <v-list-item-icon>
             <v-icon>mdi-file-document-edit</v-icon>
           </v-list-item-icon>
           <v-list-item-content>
             <v-list-item-title>
-              <div @click.stop="saveProject">Save Project</div>
+              Save Project
             </v-list-item-title>
           </v-list-item-content>
         </v-list-item>
@@ -113,8 +114,10 @@
 </template>
 
 <script>
+import * as _ from "lodash";
+import { Project } from "./classes/Project";
 import Vue from "vue";
-import { mapState } from "vuex";
+import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
   computed: {
@@ -128,9 +131,15 @@ export default Vue.extend({
   },
 
   methods: {
+    ...mapMutations(["MODIFY_PROJECT"]),
     getFilename() {
       // TODO make this strip out any unusable characters
       return this.project.settings.title + ".json";
+    },
+    modifyProject(fileContents) {
+      if (this.validFile(fileContents)) {
+        this.MODIFY_PROJECT(new Project(fileContents));
+      }
     },
     openFile(event) {
       const target = event.target;
@@ -143,7 +152,7 @@ export default Vue.extend({
             const target = event.target;
             const data = target.result;
             try {
-              this.project = JSON.parse(data);
+              this.modifyProject(JSON.parse(data));
             } catch (exception) {
               // TODO handle invalid file contents
               console.log(exception);
@@ -154,10 +163,9 @@ export default Vue.extend({
       }
     },
     openProject() {
-      document
-        .getElementById("open-project")
-        .addEventListener("change", this.openFile)
-        .click();
+      const input = document.getElementById("open-project");
+      input.addEventListener("change", this.openFile);
+      input.click();
     },
     saveProject() {
       const anchor = document.createElement("a");
@@ -168,6 +176,14 @@ export default Vue.extend({
       anchor.click();
       document.body.removeChild(anchor);
       URL.revokeObjectURL(anchor.href);
+    },
+    validFile(fileContents) {
+      // TODO validate contents
+      return (
+        typeof fileContents === "object" &&
+        _.has(fileContents, "cards") &&
+        _.has(fileContents, "settings")
+      );
     }
   },
 
