@@ -1,4 +1,5 @@
 import { ActBreak } from "../classes/ActBreak";
+import "array.prototype.move";
 import * as _ from "lodash";
 import { defaultProject } from "../classes/Project";
 import { Scene } from "../classes/Scene";
@@ -55,12 +56,22 @@ export default new Vuex.Store({
           index === -1 ? noStatus : state.project.settings.statuses[index];
       }
     },
-    MOVE_CARD: (state, card, index) => {
-      Vue.set(
-        state.project,
-        "cards",
-        _.pull(state.project.cards, card).splice(index, 0, card)
-      );
+    MOVE_CARD: (state, data) => {
+      const dragCardIndex = _.findIndex(state.project.cards, [
+        "id",
+        data.dragCardId
+      ]);
+      const dropCardIndex = _.findIndex(state.project.cards, [
+        "id",
+        data.dropCardId
+      ]);
+      if (dragCardIndex >= 0 && dropCardIndex >= 0) {
+        Vue.set(
+          state.project,
+          "cards",
+          state.project.cards.move(dragCardIndex, dropCardIndex)
+        );
+      }
     },
     REMOVE_CARD: function(state, card) {
       // TODO why is this not being updated automatically

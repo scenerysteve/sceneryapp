@@ -1,3 +1,10 @@
+.act-break, .scene {
+  cursor: pointer;
+  /* Need to move these dimensions to another style, this class is used elsewhere now */
+  /*height: 195px;*/
+  /*width: 325px;*/
+}
+
 #drawer a {
   color: rgba(0, 0, 0, 0.87);
   text-decoration: none !important;
@@ -19,9 +26,4 @@
   flex-wrap: wrap;
   justify-content: space-around;
   padding: 32px;
-}
-
-.scene {
-  /*height: 195px;*/
-  /*width: 325px;*/
 }
