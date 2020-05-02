@@ -16,40 +16,28 @@
             </v-row>
           </v-container>
         </v-col>
-        <v-col class="px-0">
-          <v-container>
-            <v-row dense>
-              <v-tooltip top>
-                <template #activator="{ on }">
-                  <v-btn @click="removeCard" icon v-on="on">
-                    <v-icon>mdi-trash-can</v-icon>
-                  </v-btn>
-                </template>
-                <span>Remove Card</span>
-              </v-tooltip>
-            </v-row>
-            <v-row dense>
-              <v-tooltip top>
-                <template #activator="{ on }">
-                  <v-btn @click="editCard" icon v-on="on">
-                    <v-icon>mdi-pencil</v-icon>
-                  </v-btn>
-                </template>
-                <span>Edit Card</span>
-              </v-tooltip>
-            </v-row>
-          </v-container>
-        </v-col>
+        <card-controls :event-dispatcher="eventDispatcher" />
       </v-row>
     </v-container>
   </v-card>
 </template>
 
 <script>
+import CardControls from "./CardControls";
 import Vue from "vue";
 import { mapMutations } from "vuex";
 
 export default Vue.extend({
+  components: { CardControls },
+  created() {
+    this.eventDispatcher.$on("editCard", this.editCard);
+    this.eventDispatcher.$on("removeCard", this.removeCard);
+  },
+  data() {
+    return {
+      eventDispatcher: new Vue({})
+    };
+  },
   methods: {
     ...mapMutations(["REMOVE_CARD"]),
     editCard() {
