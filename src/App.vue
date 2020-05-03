@@ -18,18 +18,16 @@
       <v-list dense nav subheader>
         <v-subheader>File</v-subheader>
         <v-divider></v-divider>
-        <router-link to="/">
-          <v-list-item link>
-            <v-list-item-icon>
-              <v-icon>mdi-file-plus</v-icon>
-            </v-list-item-icon>
-            <v-list-item-content>
-              <v-list-item-title>
-                New Project
-              </v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </router-link>
+        <v-list-item @click="dialogEventDispatcher.$emit('showDialog')" link>
+          <v-list-item-icon>
+            <v-icon>mdi-file-plus</v-icon>
+          </v-list-item-icon>
+          <v-list-item-content>
+            <v-list-item-title>
+              New Project
+            </v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
         <v-list-item @click="openProject" link>
           <v-list-item-icon>
             <v-icon>mdi-file-document</v-icon>
@@ -108,25 +106,51 @@
     </v-app-bar>
 
     <v-content>
+      <Dialog
+        :actions="dialogActions"
+        :event-dispatcher="dialogEventDispatcher"
+      >
+        <template v-slot:title>
+          Warning
+        </template>
+        <template v-slot:text>
+          Are you sure you want to start a new project? This will discard your
+          current project.
+        </template>
+      </Dialog>
       <router-view />
     </v-content>
   </v-app>
 </template>
 
 <script>
+import Dialog from "./components/Dialog";
 import * as _ from "lodash";
-import { Project } from "./classes/Project";
+import { defaultProject, Project } from "./classes/Project";
 import Vue from "vue";
 import { mapMutations, mapState } from "vuex";
 
 export default Vue.extend({
+  components: { Dialog },
+
   computed: {
     ...mapState(["project"])
   },
 
+  created() {
+    this.dialogEventDispatcher.$on("dialogConfirmClick", this.newProject);
+    this.dialogEventDispatcher.$on("dialogOtherClick", this.saveProject);
+  },
+
   data() {
     return {
-      drawer: null // Null makes the drawer show on page load on desktop
+      dialogActions: {
+        cancel: "Cancel",
+        confirm: "Confirm",
+        other: "Save"
+      },
+      dialogEventDispatcher: new Vue({}),
+      drawer: null, // Null makes the drawer show on page load on desktop
     };
   },
 
@@ -137,8 +161,17 @@ export default Vue.extend({
       return this.project.settings.title + ".json";
     },
     modifyProject(fileContents) {
+      // TODO modify this to separate valid file check
       if (this.validFile(fileContents)) {
         this.MODIFY_PROJECT(new Project(fileContents));
+      }
+    },
+    newProject() {
+      if (this.$router.currentRoute.name.localeCompare("New Project") !== 0) {
+        // TODO modify this to use modifyProject method
+        // TODO why isn't this working?
+        this.MODIFY_PROJECT(defaultProject);
+        this.$router.push("/");
       }
     },
     openFile(event) {
@@ -154,7 +187,7 @@ export default Vue.extend({
             try {
               this.modifyProject(JSON.parse(data));
             } catch (exception) {
-              // TODO handle invalid file contents
+              // TODO handle invalid file contents, maybe with v-alert
               console.log(exception);
             }
           }

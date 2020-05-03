@@ -50,6 +50,7 @@ export default Vue.extend({
       this.$router.push("editScene/" + this.card.id);
     },
     removeCard() {
+      // TODO implement Dialog component here
       if (confirm("Are you sure you want to remove this card?")) {
         this.REMOVE_CARD(this.card);
       }
