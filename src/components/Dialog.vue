@@ -11,13 +11,13 @@
       </v-card-text>
       <v-card-actions v-if="actions">
         <v-spacer></v-spacer>
-        <v-btn @click="dialogOtherClick" text v-if="actions.other">
+        <v-btn @click="dialogOther" text v-if="actions.other">
           {{ actions.other }}
         </v-btn>
-        <v-btn @click="dialogConfirmClick" text v-if="actions.confirm">
+        <v-btn @click="dialogConfirm" text v-if="actions.confirm">
           {{ actions.confirm }}
         </v-btn>
-        <v-btn @click="dialogCancelClick" text v-if="actions.cancel">
+        <v-btn @click="dialogCancel" text v-if="actions.cancel">
           {{ actions.cancel }}
         </v-btn>
       </v-card-actions>
@@ -30,8 +30,8 @@ import Vue from "vue";
 
 export default Vue.extend({
   created() {
-    this.eventDispatcher.$on("showDialog", () => (this.display = true));
-    this.eventDispatcher.$on("hideDialog", () => (this.display = false));
+    this.eventDispatcher.$on("dialogShow", () => (this.display = true));
+    this.eventDispatcher.$on("dialogHide", () => (this.display = false));
   },
   data() {
     return {
@@ -39,16 +39,16 @@ export default Vue.extend({
     };
   },
   methods: {
-    dialogCancelClick() {
-      this.eventDispatcher.$emit("dialogCancelClick");
+    dialogCancel() {
+      this.eventDispatcher.$emit("dialogCancel");
       this.display = false;
     },
-    dialogConfirmClick() {
-      this.eventDispatcher.$emit("dialogConfirmClick");
+    dialogConfirm() {
+      this.eventDispatcher.$emit("dialogConfirm");
       this.display = false;
     },
-    dialogOtherClick() {
-      this.eventDispatcher.$emit("dialogOtherClick");
+    dialogOther() {
+      this.eventDispatcher.$emit("dialogOther");
       this.display = false;
     }
   },

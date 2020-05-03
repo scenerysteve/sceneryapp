@@ -18,7 +18,7 @@
       <v-list dense nav subheader>
         <v-subheader>File</v-subheader>
         <v-divider></v-divider>
-        <v-list-item @click="dialogEventDispatcher.$emit('showDialog')" link>
+        <v-list-item @click="dialogEventDispatcher.$emit('dialogShow')" link>
           <v-list-item-icon>
             <v-icon>mdi-file-plus</v-icon>
           </v-list-item-icon>
@@ -105,19 +105,18 @@
       <v-btn href="" small text>View on Github</v-btn>
     </v-app-bar>
 
+    <Dialog :actions="dialogActions" :event-dispatcher="dialogEventDispatcher">
+      <template v-slot:title>
+        Warning
+      </template>
+      <template v-slot:text>
+        Are you sure you want to start a new project? This will discard your
+        current project.
+      </template>
+    </Dialog>
+
     <v-content>
-      <Dialog
-        :actions="dialogActions"
-        :event-dispatcher="dialogEventDispatcher"
-      >
-        <template v-slot:title>
-          Warning
-        </template>
-        <template v-slot:text>
-          Are you sure you want to start a new project? This will discard your
-          current project.
-        </template>
-      </Dialog>
+      <!-- Main page content rendered here -->
       <router-view />
     </v-content>
   </v-app>
@@ -138,8 +137,8 @@ export default Vue.extend({
   },
 
   created() {
-    this.dialogEventDispatcher.$on("dialogConfirmClick", this.newProject);
-    this.dialogEventDispatcher.$on("dialogOtherClick", this.saveProject);
+    this.dialogEventDispatcher.$on("dialogConfirm", this.newProject);
+    this.dialogEventDispatcher.$on("dialogOther", this.saveProject);
   },
 
   data() {
@@ -150,7 +149,7 @@ export default Vue.extend({
         other: "Save"
       },
       dialogEventDispatcher: new Vue({}),
-      drawer: null, // Null makes the drawer show on page load on desktop
+      drawer: null // Null makes the drawer show on page load on desktop
     };
   },
 
@@ -160,17 +159,13 @@ export default Vue.extend({
       // TODO make this strip out any unusable characters
       return this.project.settings.title + ".json";
     },
-    modifyProject(fileContents) {
-      // TODO modify this to separate valid file check
-      if (this.validFile(fileContents)) {
-        this.MODIFY_PROJECT(new Project(fileContents));
-      }
+    modifyProject(project) {
+      this.MODIFY_PROJECT(project);
     },
     newProject() {
       if (this.$router.currentRoute.name.localeCompare("New Project") !== 0) {
-        // TODO modify this to use modifyProject method
         // TODO why isn't this working?
-        this.MODIFY_PROJECT(defaultProject);
+        this.modifyProject(defaultProject);
         this.$router.push("/");
       }
     },
@@ -185,7 +180,10 @@ export default Vue.extend({
             const target = event.target;
             const data = target.result;
             try {
-              this.modifyProject(JSON.parse(data));
+              const fileContents = JSON.parse(data);
+              if (this.validFile(fileContents)) {
+                this.modifyProject(new Project(fileContents));
+              }
             } catch (exception) {
               // TODO handle invalid file contents, maybe with v-alert
               console.log(exception);
