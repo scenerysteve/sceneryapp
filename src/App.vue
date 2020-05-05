@@ -105,10 +105,10 @@
       <v-btn href="" small text>View on Github</v-btn>
     </v-app-bar>
 
-    <Dialog :actions="dialogActions" :event-dispatcher="dialogEventDispatcher">
-      <template v-slot:title>
-        Warning
-      </template>
+    <Dialog
+      :actions="{ cancel: 'Cancel', confirm: 'Confirm', other: 'Save' }"
+      :event-dispatcher="dialogEventDispatcher"
+    >
       <template v-slot:text>
         Are you sure you want to start a new project? This will discard your
         current project.
@@ -143,11 +143,6 @@ export default Vue.extend({
 
   data() {
     return {
-      dialogActions: {
-        cancel: "Cancel",
-        confirm: "Confirm",
-        other: "Save"
-      },
       dialogEventDispatcher: new Vue({}),
       drawer: null // Null makes the drawer show on page load on desktop
     };

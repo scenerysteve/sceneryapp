@@ -1,5 +1,6 @@
 <template>
   <div
+    class="d-flex"
     :class="{ 'act-break': isActBreak, scene: !isActBreak }"
     draggable="true"
     @dragover.prevent.stop
@@ -8,8 +9,34 @@
     @drop.prevent="drop"
     :id="card.id"
   >
-    <act-break :card="card" v-if="isActBreak" />
-    <Scene :card="card" v-else />
+    <act-break :card="card" class="flex-shrink-0" v-if="isActBreak" />
+    <Scene :card="card" class="flex-shrink-0" v-else />
+    <v-container class="flex-shrink-0">
+      <v-row dense>
+        <v-tooltip top>
+          <template #activator="{ on }">
+            <v-btn
+              @click="eventDispatcher.$emit('cardRemove', card.id)"
+              icon
+              v-on="on"
+            >
+              <v-icon>mdi-trash-can</v-icon>
+            </v-btn>
+          </template>
+          <span>Remove Card</span>
+        </v-tooltip>
+      </v-row>
+      <v-row dense>
+        <v-tooltip top>
+          <template #activator="{ on }">
+            <v-btn @click="cardEdit" icon v-on="on">
+              <v-icon>mdi-pencil</v-icon>
+            </v-btn>
+          </template>
+          <span>Edit Card</span>
+        </v-tooltip>
+      </v-row>
+    </v-container>
   </div>
 </template>
 
@@ -32,6 +59,11 @@ export default Vue.extend({
   },
   methods: {
     ...mapMutations(["MOVE_CARD"]),
+    cardEdit() {
+      this.$router.push(
+        (this.isActBreak ? "/editActBreak/" : "/editScene/") + this.card.id
+      );
+    },
     dragStart: event => {
       // The target in the dragStart is the card being dragged
       event.dataTransfer.setData("cardId", event.target.id);
@@ -72,6 +104,6 @@ export default Vue.extend({
     }
   },
   name: "Card",
-  props: ["card"]
+  props: ["card", "eventDispatcher"]
 });
 </script>

@@ -3,7 +3,7 @@
     <v-card>
       <v-card-title>
         <span class="headline">
-          <slot name="title" />
+          <slot name="title">Warning</slot>
         </span>
       </v-card-title>
       <v-card-text>
