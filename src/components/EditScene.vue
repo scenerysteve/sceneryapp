@@ -36,6 +36,7 @@ export default Vue.extend({
     }
   },
   created() {
+    // TODO this and EditActBreak need to just use the computed prop card. Instead of returning null if no ID, it can return the defaults
     if (this.card) {
       this.scene.description = this.card.description;
       this.scene.id = this.card.id;

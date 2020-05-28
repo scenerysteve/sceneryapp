@@ -19,6 +19,7 @@ export default new Vuex.Store({
   modules: {},
   mutations: {
     ADD_CARD: (state, card) => state.project.cards.push(card),
+    ADD_STATUS: (state, status) => state.project.settings.statuses.push(status),
     EDIT_CARD: (state, card) => {
       const index = _.findIndex(state.project.cards, ["id", card.id]);
       // ActBreak edit
@@ -26,12 +27,21 @@ export default new Vuex.Store({
         state.project.cards[index].act = card.act;
       }
       // Scene edit
+      // TODO why am I passing a brand new Scene obj here just to one by one copy the values?
       if (card instanceof Scene) {
         state.project.cards[index].description = card.description;
         state.project.cards[index].isPlot = card.isPlot;
         state.project.cards[index].status = card.status;
         state.project.cards[index].title = card.title;
       }
+    },
+    EDIT_STATUS: (state, status) => {
+      Vue.set(
+        state.project.settings.statuses,
+        _.findIndex(state.project.settings.statuses, ["id", status.id]),
+        status
+      );
+      // TODO Update card statuses
     },
     MODIFY_PROJECT: (state, project) => (state.project = project),
     MODIFY_SETTINGS: (state, settings) => {

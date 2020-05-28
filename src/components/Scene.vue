@@ -3,9 +3,10 @@
     style="height: 195px; width: 325px;"
     :style="{ 'background-color': card.status.color }"
   >
-    <v-card-title>
+    <v-card-title style="word-break: break-word;">
       <span>{{ card.title }}</span>
       <v-spacer></v-spacer>
+      <!-- TODO Fix issue with placement of isPlot icon on scenes with longer titles that wrap to next line -->
       <v-tooltip top>
         <template #activator="{ on }">
           <v-icon :class="{ 'is-plot': card.isPlot }" v-on="on">

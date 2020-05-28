@@ -1,7 +1,9 @@
 import AddActBreak from "../components/AddActBreak.vue";
 import AddScene from "../components/AddScene.vue";
+import AddStatus from "../components/AddStatus.vue";
 import EditActBreak from "../components/EditActBreak";
 import EditScene from "../components/EditScene.vue";
+import EditStatus from "../components/EditStatus.vue";
 import EditSettings from "../components/EditSettings.vue";
 import NewProject from "../components/NewProject";
 import Project from "../components/Project.vue";
@@ -23,6 +25,11 @@ export default new VueRouter({
       path: "/addScene"
     },
     {
+      component: AddStatus,
+      name: "Add Status",
+      path: "/addStatus"
+    },
+    {
       component: EditActBreak,
       name: "Edit Act Break",
       path: "/editActBreak/:id",
@@ -32,6 +39,12 @@ export default new VueRouter({
       component: EditScene,
       name: "Edit Scene",
       path: "/editScene/:id",
+      props: true
+    },
+    {
+      component: EditStatus,
+      name: "Edit Status",
+      path: "/editStatus/:id",
       props: true
     },
     {

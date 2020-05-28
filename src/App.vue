@@ -68,11 +68,23 @@
         <router-link to="addActBreak">
           <v-list-item link>
             <v-list-item-icon>
-              <v-icon>mdi-credit-card-plus</v-icon>
+              <v-icon>mdi-numeric-1-box</v-icon>
             </v-list-item-icon>
             <v-list-item-content>
               <v-list-item-title>
                 Add Act Break
+              </v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </router-link>
+        <router-link to="addStatus">
+          <v-list-item link>
+            <v-list-item-icon>
+              <v-icon>mdi-information</v-icon>
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title>
+                Add Status
               </v-list-item-title>
             </v-list-item-content>
           </v-list-item>
